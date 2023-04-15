@@ -211,6 +211,7 @@ Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp'])
     // Route::get('/checkout/{customer_id}',[CheckoutController::class,'checkout']); 
     Route::get('/payment/{customer_id}',[CheckoutController::class,'payment']); 
     Route::post('/thanhtoantructiep',[CheckoutController::class,'thanhtoan_tructiep']);
+    Route::get('/thanhtoantructiep',[CheckoutController::class,'thanhtoan_tructiep']);
     Route::post('/thanhtoan-vnpay',[CheckoutController::class,'thanhtoan_vnpay']);
     Route::post('/save-checkout-customer',[CheckoutController::class,'save_checkout_customer']);
     Route::post('/update-address/{customer_id}',[CheckoutController::class,'update_address']); 
