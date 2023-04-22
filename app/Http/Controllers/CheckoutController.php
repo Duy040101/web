@@ -154,7 +154,7 @@ class CheckoutController extends Controller
         else{
         $data = array();
         $data['payment_method'] = 0;    //0 là thanh toán khi nhận hàng
-        $data['payment_status'] = 'Đang chờ xử lý';
+        $data['payment_status'] = 'Chưa thanh toán';
         $payment_id = DB::table('payment')->insertGetId($data);
         
        
@@ -410,21 +410,7 @@ class CheckoutController extends Controller
        
     }
     public function update_password_user($customer_id, Request $request){
-        /* $request->validate([
-
-            'old_password' => ['required'],
-
-            'new_password' => ['required'],
-
-            'new_password_2' => ['same:new_password'],
-
-        ] ,[
-          
-            "old_password.required"=>"Vui lòng nhập mật khẩu cũ",
-            "new_password."=>"Email có định dạng là `name@gmail.com`",
-            "password.required"=>"Vui lòng nhập mật khẩu",
-           
-        ]); */
+        
         
         $old_password = md5($request->old_password);
         $new_password= md5($request->new_password);
@@ -475,8 +461,8 @@ class CheckoutController extends Controller
    
     else{
     $data = array();
-    $data['payment_method'] = 0;    //0 là thanh toán khi nhận hàng
-    $data['payment_status'] = 'Đang chờ xử lý';
+    $data['payment_method'] = 1;    //1 là thanh toán khi nhận hàng
+    $data['payment_status'] = 'Đã thanh toán';
     $payment_id = DB::table('payment')->insertGetId($data);
     
     $total=Cart::subtotal(0,'','');
@@ -518,7 +504,7 @@ class CheckoutController extends Controller
   
     
     $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    $vnp_Returnurl = "http://127.0.0.1:8000/thanhtoantructiep";
+    $vnp_Returnurl = "http://127.0.0.1:8000/thanhtoanonline";
     $vnp_TmnCode = "4GVUGW7G";//Mã website tại VNPAY 
     $vnp_HashSecret = "KBGRGUPTOFJAZEZNFKAPCQHDIJYQBTOV"; //Chuỗi bí mật
     
@@ -529,9 +515,7 @@ class CheckoutController extends Controller
     $vnp_Locale = 'vn';
     $vnp_BankCode = 'NCB';
     $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-    //Add Params of 2.0.1 Version
-    //$vnp_ExpireDate = $_POST['txtexpire'];
-    //Billing
+    
     
     $inputData = array(
         "vnp_Version" => "2.1.0",
@@ -552,11 +536,9 @@ class CheckoutController extends Controller
     if (isset($vnp_BankCode) && $vnp_BankCode != "") {
         $inputData['vnp_BankCode'] = $vnp_BankCode;
     }
-    // if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
-    //     $inputData['vnp_Bill_State'] = $vnp_Bill_State;
-    // }
     
-    //var_dump($inputData);
+    
+    
     ksort($inputData);
     $query = "";
     $i = 0;
@@ -586,7 +568,13 @@ class CheckoutController extends Controller
             echo json_encode($returnData);
         }
         // vui lòng tham khảo thêm tại code demo
-    return view('pages.checkout.handcash')->with('category',$category)->with('brand',$brand);
+    
 }
+}
+public function show_handcash(){
+    $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+    $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+    Cart::destroy(); //xóa các sp trong giỏ hàng sau khi thanh toán xong
+    return view('pages.checkout.handcash')->with('category',$category)->with('brand',$brand);
 }
 }

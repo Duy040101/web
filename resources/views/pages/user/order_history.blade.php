@@ -91,7 +91,7 @@
                   <td>{{$detail->product_id}}</td>
                   <td>{{$detail->product_name}}</td>
                   <td>{{$detail->product_qty}}</td>
-                  <td>{{$detail->price}}</td>
+                  <td>{{number_format($detail->price).' VND'}} </td>
                 </tr>
               @endforeach
             </table> 

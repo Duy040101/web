@@ -6,7 +6,7 @@
 				<h2 class="title">Quản lý tài khoản</h2>
 			</div>
 			
-			<div class="table-responsive " style="display:grid;grid-template-columns: auto auto;">
+			<div class="table-responsive" style="display:grid;grid-template-columns: auto auto;">
 				
 				<table class="">
 					<tr>

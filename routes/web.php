@@ -94,6 +94,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function() {
         ->name('admin.unactive_product');
         Route::get('/active/{product_id}',[ProductController::class,'active_product'])
         ->name('admin.active_product');
+        Route::get('/outOfStock',[ProductController::class,'out_of_stock_product'])
+        ->name('admin.out_of_stock');
     });
 
     // Order đơn hàng
@@ -126,6 +128,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function() {
         ->name('admin.order_statistic');
         Route::get('/search',[AdminController::class, 'tim_kiem_thong_ke'])
         ->name('admin.timkiem_thong_ke');
+        Route::get('/chart',[AdminController::class, 'bieudo_thongke'])
+        ->name('admin.chart_statistic');
     });
     
     //khuyến mãi
@@ -217,5 +221,31 @@ Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp'])
     Route::post('/update-address/{customer_id}',[CheckoutController::class,'update_address']); 
     Route::get('/vnpay-payment',[CheckoutController::class,'vnpay_payment'])
     ->name('vnpay_payment');
-
+    Route::post('/thanhtoanonline',[CheckoutController::class,'show_handcash']);
+    Route::get('/thanhtoanonline',[CheckoutController::class,'show_handcash']);
 //cua usser
+
+//lienhe
+    Route::get("/lienhe", function(){ 
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+        return view('pages.lienhe.lienhe')->with('category',$category)->with('brand',$brand); });
+    use App\Mail\GuiEmail;
+    Route::post("/guilienhe", function(Illuminate\Http\Request $request){ 
+        $arr = request()->post(); 
+        $ht = trim(strip_tags( $arr['ht'] ));
+        $em = trim(strip_tags( $arr['em'] ));
+        $nd = trim(strip_tags( $arr['nd'] ));
+        $adminEmail = 'duy35931@gmail.com'; //Gửi thư đến ban quản trị
+        Mail::mailer('smtp')->to( $adminEmail )
+        ->send( new GuiEmail($ht, $em, $nd) );
+
+        $request->session()->flash('thongbao', "Đã gửi mail");
+        return redirect("thongbao"); 
+        });
+    Route::get("/thongbao", function(Illuminate\Http\Request $request){ 
+            $tb = $request->session()->get('thongbao');
+            $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+            $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+            return view('pages.lienhe.thongbao',['thongbao'=> $tb])->with('category',$category)->with('brand',$brand); 
+        });
