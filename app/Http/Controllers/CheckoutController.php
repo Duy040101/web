@@ -166,6 +166,7 @@ class CheckoutController extends Controller
         $order_data['order_total'] = Cart::subtotal(0,'','');
         $order_data['order_status'] = 'Đang chờ xử lý';
         $order_data['order_ngaydathang'] = date('Y/m/d');
+        $order_data['thang'] = date('m');
         $order_id = DB::table('order')->insertGetId($order_data);
 
         //insert vào bảng order detail;
@@ -208,7 +209,7 @@ class CheckoutController extends Controller
         ->orwhere('customer.customer_name','like',"%$search%")
         ->select('order.*','customer.*')
               ->orderBy('order.order_id','desc')
-            ->paginate(5);
+            ->paginate(10);
        
         return view('admin.manage_order')->with('all_order',$all_order);
     }   
@@ -475,6 +476,7 @@ class CheckoutController extends Controller
     $order_data['order_total'] = Cart::subtotal(0,'','');
     $order_data['order_status'] = 'Đang chờ xử lý';
     $order_data['order_ngaydathang'] = date('Y/m/d');
+    $order_data['thang'] = date('m');
     $order_id = DB::table('order')->insertGetId($order_data);
 
     //insert vào bảng order detail;

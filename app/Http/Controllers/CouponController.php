@@ -104,7 +104,7 @@ class CouponController extends Controller
                     ->where('product.product_name','like',"%$search%")
                     ->orWhere('coupon.coupon_name','like',"%$search%")
                     ->select('product.*','coupon.*','promotional_products.price_final')
-                    ->paginate(5);
+                    ->paginate(10);
     return view('admin.apply_coupon')
                     ->with('coupons',$coupons)->with('product_coupon',$product_coupon)
                  ;

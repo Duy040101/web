@@ -128,9 +128,9 @@ public function bieudo_thongke(){
      DB::raw('sum(order.order_total) as value')
     )->groupBy('order.order_ngaydathang')->orderBy('order.order_ngaydathang', 'ASC')
    ->get();
-
+// dd($data);
     
-    $data2 = DB::table('order')->select('order.thang',
+    $data2 = DB::table('order')->where('order_status','Giao hàng thành công')->select('order.thang',
      DB::raw('sum(order.order_total) as value')
     )->groupBy('order.thang')
    ->get();
