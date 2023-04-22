@@ -3,21 +3,10 @@
 
 <section id="lienhe">
 
-<form class="col-10 mx-auto p-3 border border-primary" method="post" action="/guilienhe">
-<h4>LIÊN HỆ</h4> 
-<div class="mb-3">
-    <label>Họ tên</label> <input class="form-control" name="ht" required>
-</div>
-<div class="mb-3">
-    <label>Email</label> <input class="form-control" name="em" type="email" required>
-</div>
-<div class="mb-3">
-    <label>Nội dung</label> <textarea class="col-md-9 form-control" name="nd"></textarea>
-</div>
-<div class="mb-3"> @csrf()
-    <button type="submit" class="btn btn-warning p-2" >Gửi liên hệ</button>
-</div>
-</form> 
+<h2 class="title text-center">THÔNG TIN LIÊN HỆ</h2>
+<h5>Mọi thông tin cần hỗ trợ vui lòng liên hệ qua</h5>
+<p>Email: trucptt9@gmail.com</p>
+<p>Số điện thoại: 0957 874 123</p> 
 </section>
 
 
